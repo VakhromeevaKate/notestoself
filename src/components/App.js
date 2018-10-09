@@ -15,7 +15,9 @@ export default class App extends PureComponent {
     }
 
     componentDidMount() {
-        this.setState({ notes: read_cookie(cookie_key) });
+        if (read_cookie(cookie_key).notes) {
+            this.setState({ notes: read_cookie(cookie_key).notes });
+        }
     }
 
     submit() {
@@ -24,6 +26,11 @@ export default class App extends PureComponent {
         notes.push( { text } );
         this.setState({ text: '', notes });
         bake_cookie(cookie_key, { notes })
+    }
+
+    clear() {
+        delete_cookie(cookie_key);
+        this.setState({ notes: [] })
     }
 
     render() {
@@ -44,6 +51,7 @@ export default class App extends PureComponent {
                     })
                 }
                 </div>
+                <Button onClick={() => this.clear()}>Clear notes</Button>
             </div>
         );
     }
