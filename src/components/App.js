@@ -5,20 +5,37 @@ export default class App extends PureComponent {
     constructor() {
         super();
         this.state = {
-            text: ''
+            text: '',
+            notes: []
         }
     }
+
+    submit() {
+        const notes = this.state.notes;
+        const newNote = {text: this.state.text};
+
+        notes.push(newNote);
+        this.setState({text: '', notes: notes});
+    }
+
     render() {
         return (
             <div>
                 <h2>Note to self</h2>
                 <Form inline>
-                    <FormControl onChange={event => {this.setState({ text: event.target.value }) }}/>
+                    <FormControl value={this.state.text} onChange={event => {this.setState({ text: event.target.value }) }}/>
                     {'  '}
-                    <Button onClick={() => { console.log(`state: ${this.state.text}`) }}>
-                        Submit
-                    </Button>
+                    <Button onClick={() => this.submit()}>Submit</Button>
                 </Form>
+                <div>
+                {
+                    this.state.notes.map((note, index) => {
+                        return(
+                            <div key={index}>{note.text}</div>
+                        )
+                    })
+                }
+                </div>
             </div>
         );
     }
