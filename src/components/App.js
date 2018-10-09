@@ -1,5 +1,9 @@
 import React, { PureComponent } from 'react';
 import { Form, FormControl, Button } from 'react-bootstrap';
+import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
+import Note from './Note';
+
+const cookie_key = 'NOTES';
 
 export default class App extends PureComponent {
     constructor() {
@@ -10,12 +14,16 @@ export default class App extends PureComponent {
         }
     }
 
-    submit() {
-        const notes = this.state.notes;
-        const newNote = {text: this.state.text};
+    componentDidMount() {
+        this.setState({ notes: read_cookie(cookie_key) });
+    }
 
-        notes.push(newNote);
-        this.setState({text: '', notes: notes});
+    submit() {
+        const { notes, text } = this.state;
+
+        notes.push( { text } );
+        this.setState({ text: '', notes });
+        bake_cookie(cookie_key, { notes })
     }
 
     render() {
@@ -31,7 +39,7 @@ export default class App extends PureComponent {
                 {
                     this.state.notes.map((note, index) => {
                         return(
-                            <div key={index}>{note.text}</div>
+                            <Note key={index} note={note}/>
                         )
                     })
                 }
