@@ -5,12 +5,13 @@ import Note from '../components/Note';
 
 configure({ adapter: new Adapter() });
 
+const props = { note: {text: 'test_note'}};
+
 describe('Note', () => {
-    let note = mount(
-        <Note note={{ text: 'test note'}}/>
-    );
+    let note = mount(<Note {... props}/>);
 
     it('renders the note text', () => {
-        expect(note.find('p').text()).toEqual('test note');
+        expect(note.find('p').text()).toEqual(props.note.text);
+        // console.log(note.debug());
     });
 });
